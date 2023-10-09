@@ -13,6 +13,7 @@ dependencies {
                 'com.codeborne:pdf-test:1.8.1',
                 'commons-io:commons-io:2.14.0',
                 'org.apache.poi:poi:5.2.4',
+                'com.opencsv:opencsv:5.8',
                 'com.codeborne:xls-test:1.7.0'
                 )
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.10.0')
