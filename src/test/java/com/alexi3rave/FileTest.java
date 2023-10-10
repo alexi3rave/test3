@@ -11,14 +11,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 
-
 import java.io.*;
 import java.util.List;
+import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+import static com.ibm.java.diagnostics.utils.Context.logger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -88,19 +89,48 @@ public class FileTest {
         }
     }
 
+
     @Test
-    @DisplayName("Parsing Zip file")
-    void parseZipFile() throws IOException {
+    @DisplayName("Parsing Zip2 file")
+    void parseZip2File(File zip, String entry) throws IOException {
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        InputStream is = classLoader.getResourceAsStream("D.zip");
+        ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
+            for (ZipEntry e; (e = zis.getNextEntry()) != null; )
+            {
+                System.out.println("reading e " +e.getName());
+                Scanner sc = new Scanner(zis);
+                while (sc.hasNextLine());
+                {
+                    System.out.println("reading " + e.getName() + " completed");
+                }
+                sc.close();
+                zis.close();
+            }
+
+                    }
+    @Test
+    @DisplayName("Parsing Zip CSV file")
+    void parseZipFile() throws IOException, CsvException {
         ClassLoader classLoader = this.getClass().getClassLoader();
         try (InputStream is = classLoader.getResourceAsStream("D.zip");
              ZipInputStream zis = new ZipInputStream(is)) {
             ZipEntry entry;
             while ((entry = zis.getNextEntry()) != null) {
-                System.out.println(entry.getName());
+                Reader reader = new InputStreamReader(is);
+                {
+                    CSVReader parser = new CSVReader(reader);
+                    List<String[]> strings = parser.readAll();
+                    assertEquals(108, strings.size());
+                }
             }
+        }
+        catch (Exception e) {
+            logger.info(e.getMessage());
         }
     }
 }
+
 
 
 
