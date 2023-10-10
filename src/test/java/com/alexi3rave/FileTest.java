@@ -104,8 +104,7 @@ public class FileTest {
                 {
                     System.out.println("reading " + e.getName() + " completed");
                 }
-                sc.close();
-                zis.close();
+
             }
 
                     }
@@ -123,6 +122,8 @@ public class FileTest {
                     List<String[]> strings = parser.readAll();
                     assertEquals(108, strings.size());
                 }
+                reader.close();
+                is.close();
             }
         }
         catch (Exception e) {
