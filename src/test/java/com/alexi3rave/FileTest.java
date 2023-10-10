@@ -90,24 +90,7 @@ public class FileTest {
     }
 
 
-    @Test
-    @DisplayName("Parsing Zip2 file")
-    void parseZip2File(File zip, String entry) throws IOException {
-        ClassLoader classLoader = this.getClass().getClassLoader();
-        InputStream is = classLoader.getResourceAsStream("D.zip");
-        ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
-            for (ZipEntry e; (e = zis.getNextEntry()) != null; )
-            {
-                System.out.println("reading e " +e.getName());
-                Scanner sc = new Scanner(zis);
-                while (sc.hasNextLine());
-                {
-                    System.out.println("reading " + e.getName() + " completed");
-                }
 
-            }
-
-                    }
     @Test
     @DisplayName("Parsing Zip CSV file")
     void parseZipFile() throws IOException, CsvException {
