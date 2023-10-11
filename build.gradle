@@ -1,6 +1,25 @@
 plugins {
     id 'java-library'
+    id("io.qameta.allure") version "2.11.2"
 }
+
+allure {
+    version.set("2.19.0")
+    adapter {
+        adapter.autoconfigure.set(true)
+        aspectjWeaver.set(true)
+
+        frameworks {
+            junit5 {
+                autoconfigureListeners.set(true)
+                adapterVersion.set("2.19.0")
+                enabled.set(true)
+            }
+
+        }
+    }
+}
+
 
 repositories {
     mavenCentral()
@@ -14,10 +33,18 @@ dependencies {
                 'commons-io:commons-io:2.14.0',
                 'org.apache.poi:poi:5.2.4',
                 'com.opencsv:opencsv:5.8',
-                'com.codeborne:xls-test:1.7.0'
+                'com.codeborne:xls-test:1.7.0',
+                'io.qameta.allure:allure-selenide:2.21.0'
                 )
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.10.0')
 }
 test {
     useJUnitPlatform()
+}
+compileJava.options.encoding = 'UTF-8' // устанавливает кодировку для компилируемого кода
+javadoc.options.encoding = 'UTF-8' // устанавливает кодировку для генерируемой документации
+compileTestJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }

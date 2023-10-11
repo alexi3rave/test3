@@ -71,9 +71,9 @@ public class FileTest {
         boolean checkPassed = parsetXls.excel
                 .getSheetAt(0)
                 .getRow(4)
-                .getCell(1)
+                .getCell(2)
                 .getStringCellValue()
-                .contains("1");
+                .contains("2365");
         assertTrue(checkPassed);
     }
 
@@ -111,6 +111,27 @@ public class FileTest {
         }
         catch (Exception e) {
             logger.info(e.getMessage());
+        }
+    }
+    @Test
+    @DisplayName("Parsing Zip CSV file")
+    void parseZipCVS2File() throws IOException, CsvException {
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        try (InputStream is = classLoader.getResourceAsStream("D.zip");
+             ZipInputStream zis = new ZipInputStream(is)) {
+            ZipEntry entry;
+            while ((entry = zis.getNextEntry()) != null) {
+                {
+                    if(entry.getName().endsWith(".csv")) {
+                        Reader reader = new InputStreamReader(zis);
+                        CSVReader parser = new CSVReader(reader);
+                        List<String[]> strings = parser.readAll();
+                        assertEquals(77, strings.size());
+                    }
+                    zis.closeEntry();
+                }
+            }
+
         }
     }
 }
