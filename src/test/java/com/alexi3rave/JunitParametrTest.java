@@ -10,10 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -35,6 +32,7 @@ public class JunitParametrTest {
                 .find(Condition.text("Таганрог"))
                 .shouldBe(Condition.visible);
     }
+
     @Disabled
     @ValueSource(strings = {"Таганрог", "Taganrog"})
     @Tag("minor")
@@ -47,7 +45,8 @@ public class JunitParametrTest {
                 .find(Condition.text(searchQuery))
                 .shouldBe(Condition.visible);
     }
-@Disabled
+
+    @Disabled
     @ValueSource(strings = {
             "Таганрог_10 лучших достопримечательностей в Таганроге 2023",
             "Taganrog_Bay in the Sea of Azov"})
@@ -62,7 +61,8 @@ public class JunitParametrTest {
                 .find(Condition.text(strings[1]))
                 .shouldBe(Condition.visible);
     }
-@Disabled
+
+    @Disabled
     @CsvSource(value = {
             "Таганрог| 10 лучших достопримечательностей в Таганроге 2023",
             "Taganrog| Bay in the Sea of Azov"},
@@ -78,16 +78,18 @@ public class JunitParametrTest {
                 .shouldBe(Condition.visible);
 
     }
-    static Stream<Arguments>JunitMethodParametrTest(){
+
+    static Stream<Arguments> JunitMethodParametrTest() {
         return Stream.of(
                 Arguments.of("Таганрог", List.of("10 лучших достопримечательностей в Таганроге 2023")),
-                Arguments.of("Taganrog",List.of("Bay in the Sea of Azov"))
+                Arguments.of("Taganrog", List.of("Bay in the Sea of Azov"))
         );
     }
+
     @MethodSource
     @Tag("minor")
     @ParameterizedTest(name = "Поиск в yahoo слова {0} и проверка вывода {1}")
-    void JunitMethodParametrTest(String searchQuery, List <String > expectedResult) {
+    void JunitMethodParametrTest(String searchQuery, List<String> expectedResult) {
         Selenide.open("https://yahoo.com");
         $("#ybar-sbq").setValue(searchQuery);
         $("button[type='submit']").click();
@@ -96,9 +98,19 @@ public class JunitParametrTest {
                 .shouldBe(Condition.visible);
 
     }
-    public void JunitMethodParametrTest(String city) {
-        Allure.parameter("Город", city);
+
+    @EnumSource(SearchQuery.class)
+    @Tag("minor")
+    @ParameterizedTest(name = "Поиск в yahoo слова {0} и проверка вывода {1}")
+    void JunitCsvParametrTest(SearchQuery searchQuery) {
+        Selenide.open("https://yahoo.com");
+        $("#ybar-sbq").setValue(searchQuery.name());
+        $("button[type='submit']").click();
+        $$("#main")
+                .find(Condition.text(searchQuery.name()))
+                .shouldBe(Condition.visible);
     }
-   }
+}
+
 
 
