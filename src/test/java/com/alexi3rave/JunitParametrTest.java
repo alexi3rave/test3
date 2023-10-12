@@ -118,6 +118,7 @@ public class JunitParametrTest {
             }
     @Tag("minor")
     @ParameterizedTest(name = "Поиск в yahoo слова {0} и проверка вывода {1}")
+    @MethodSource
     void JunitStaticArgParametrTest(String searchQuery, String expectedResult) {
         Selenide.open("https://yahoo.com");
         $("#ybar-sbq").setValue(searchQuery);
@@ -126,7 +127,7 @@ public class JunitParametrTest {
                 .find(Condition.text(String.valueOf(expectedResult)))
                 .shouldBe(Condition.visible);
     }
-    }
+}
 
 
 
