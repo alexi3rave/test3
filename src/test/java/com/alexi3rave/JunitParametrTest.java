@@ -2,9 +2,6 @@ package com.alexi3rave;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.logevents.SelenideLogger;
-import io.qameta.allure.Allure;
-import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -19,6 +16,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class JunitParametrTest {
+
 
     @Disabled
     @DisplayName("Поиск в яху слово Таганрог")
@@ -86,6 +84,7 @@ public class JunitParametrTest {
         );
     }
 
+    @Disabled
     @MethodSource
     @Tag("minor")
     @ParameterizedTest(name = "Поиск в yahoo слова {0} и проверка вывода {1}")
@@ -99,6 +98,7 @@ public class JunitParametrTest {
 
     }
 
+    @Disabled
     @EnumSource(SearchQuery.class)
     @Tag("minor")
     @ParameterizedTest(name = "Поиск в yahoo слова {0} и проверка вывода {1}")
@@ -110,7 +110,23 @@ public class JunitParametrTest {
                 .find(Condition.text(searchQuery.name()))
                 .shouldBe(Condition.visible);
     }
-}
+    static List<String> arguments = List.of("10 лучших достопримечательностей в Таганроге 2023", "Bay in the Sea of Azov");
+    static Stream<Arguments> JunitStaticArgParametrTest() {
+        return Stream.of(
+                Arguments.of("Таганрог", arguments.get(0)),
+                Arguments.of("Taganrog", arguments.get(1)));
+            }
+    @Tag("minor")
+    @ParameterizedTest(name = "Поиск в yahoo слова {0} и проверка вывода {1}")
+    void JunitStaticArgParametrTest(String searchQuery, String expectedResult) {
+        Selenide.open("https://yahoo.com");
+        $("#ybar-sbq").setValue(searchQuery);
+        $("button[type='submit']").click();
+        $$("#main")
+                .find(Condition.text(String.valueOf(expectedResult)))
+                .shouldBe(Condition.visible);
+    }
+    }
 
 
 
