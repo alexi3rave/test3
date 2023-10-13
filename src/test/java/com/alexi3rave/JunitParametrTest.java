@@ -110,12 +110,15 @@ public class JunitParametrTest {
                 .find(Condition.text(searchQuery.name()))
                 .shouldBe(Condition.visible);
     }
+
     static List<String> arguments = List.of("10 лучших достопримечательностей в Таганроге 2023", "Bay in the Sea of Azov");
+
     static Stream<Arguments> JunitStaticArgParametrTest() {
         return Stream.of(
                 Arguments.of("Таганрог", arguments.get(0)),
                 Arguments.of("Taganrog", arguments.get(1)));
-            }
+    }
+
     @Tag("minor")
     @ParameterizedTest(name = "Поиск в yahoo слова {0} и проверка вывода {1}")
     @MethodSource
